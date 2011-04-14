@@ -61,7 +61,7 @@ public class RandbXMLPersistenceProvider implements RandbPersistenceProvider {
 			try {
 				index = (Index) jaxbIndex.read(indexFile);
 			} catch (RandbException e) {
-				e.printStackTrace();
+				log.error("Error loading index", e);
 			}
 		} else {
 			writeIndex();
@@ -78,7 +78,7 @@ public class RandbXMLPersistenceProvider implements RandbPersistenceProvider {
 			log.debug("Writing index to file");
 			jaxbIndex.write(index, getStudyFile(INDEX_XML));
 		} catch (RandbException e) {
-			e.printStackTrace();
+			log.error("Error writing index", e);
 		}
 	}
 
