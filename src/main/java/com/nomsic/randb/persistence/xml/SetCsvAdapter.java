@@ -16,13 +16,31 @@
  */
 package com.nomsic.randb.persistence.xml;
 
-import javax.xml.bind.annotation.XmlAttribute;
-import javax.xml.bind.annotation.XmlValue;
+import java.util.HashSet;
+import java.util.Set;
 
-public class HashMapEntryType {
-	@XmlAttribute
-	public String key;
+import javax.xml.bind.annotation.adapters.XmlAdapter;
 
-	@XmlValue
-	public String value;
+public class SetCsvAdapter extends XmlAdapter<String, Set<Integer>> {
+
+	@Override
+	public Set<Integer> unmarshal(String v) throws Exception {
+		String[] split = v.split(",");
+		HashSet<Integer> set = new HashSet<Integer>();
+		for (String i: split) {
+			set.add(Integer.valueOf(i));
+		}
+		return set;
+	}
+
+	@Override
+	public String marshal(Set<Integer> v) throws Exception {
+		StringBuffer sb = new StringBuffer();
+		for (Integer integer : v) {
+			sb.append(integer).append(",");
+		}
+		sb.deleteCharAt(sb.lastIndexOf(","));
+		return sb.toString();
+	}
+
 }

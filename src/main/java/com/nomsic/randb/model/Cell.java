@@ -1,4 +1,20 @@
-package com.nomsic.randb;
+/*
+ * This file is part of Randb.
+ *
+ * Randb is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+
+ * Randb is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+
+ * You should have received a copy of the GNU General Public License
+ * along with Randb.  If not, see <http://www.gnu.org/licenses/>.
+ */
+package com.nomsic.randb.model;
 
 import java.io.Serializable;
 import java.text.MessageFormat;
@@ -8,6 +24,14 @@ import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
+import com.nomsic.randb.persistence.xml.BooleanAdapter;
+
+/**
+ * A cell has a UUID, a group that it represents and can be used
+ * or unused.
+ * 
+ * @author Simon Kelly
+ */
 @XmlRootElement(name = "cell")
 public class Cell implements Serializable, Cloneable{
 	
@@ -46,6 +70,10 @@ public class Cell implements Serializable, Cloneable{
 		return group;
 	}
 	
+	public UUID getUuid() {
+		return uuid;
+	}
+	
 	@Override
 	public String toString() {
 		String string = MessageFormat.format(SHORT_FORMAT, 
@@ -55,7 +83,7 @@ public class Cell implements Serializable, Cloneable{
 		return string;
 	}
 
-	public void markUsed() {
+	/*package private*/ void markUsed() {
 		used = true;
 	}
 	

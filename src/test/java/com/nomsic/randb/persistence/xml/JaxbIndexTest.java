@@ -1,3 +1,19 @@
+/*
+ * This file is part of Randb.
+ *
+ * Randb is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+
+ * Randb is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+
+ * You should have received a copy of the GNU General Public License
+ * along with Randb.  If not, see <http://www.gnu.org/licenses/>.
+ */
 package com.nomsic.randb.persistence.xml;
 
 import java.io.File;
@@ -42,12 +58,12 @@ public class JaxbIndexTest {
 		Index index = new Index();
 		String key = "name";
 		String value = "filename";
-		index.getBlockGroups().put(key, value);
+		index.addBlockGroup(key, value);
 		jaxbUtil.write(index, file);
 		
 		index = (Index) jaxbUtil.read(file);
-		Assert.assertTrue(index.getBlockGroups().containsKey(key));
-		Assert.assertEquals(value, index.getBlockGroups().get(key));
+		Assert.assertTrue(index.getIndexMap().containsKey(key));
+		Assert.assertEquals(value, index.getIndexMap().get(key));
 	}
 	
 	@Test
@@ -56,7 +72,7 @@ public class JaxbIndexTest {
 		Index index = new Index();
 		String key = "name";
 		String value = "filename";
-		index.getBlockGroups().put(key, value);
+		index.addBlockGroup(key, value);
 		jaxbUtil.write(index, file);
 		
 		Assert.assertTrue(file.exists());

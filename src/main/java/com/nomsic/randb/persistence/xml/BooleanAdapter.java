@@ -14,27 +14,20 @@
  * You should have received a copy of the GNU General Public License
  * along with Randb.  If not, see <http://www.gnu.org/licenses/>.
  */
-package com.nomsic.randb.exception;
+package com.nomsic.randb.persistence.xml;
+import javax.xml.bind.annotation.adapters.XmlAdapter;
 
-public class RandbException extends Exception {
+public class BooleanAdapter extends XmlAdapter<Integer, Boolean>
+{
+    @Override
+    public Boolean unmarshal( Integer s )
+    {
+        return s == null ? null : s == 1;
+    }
 
-	private static final long serialVersionUID = 6561115726968717130L;
-
-	public RandbException() {
-		super();
-	}
-
-	public RandbException(String message, Throwable cause) {
-		super(message, cause);
-	}
-
-	public RandbException(String message) {
-		super(message);
-	}
-
-	public RandbException(Throwable cause) {
-		super(cause);
-	}
-
-	
+    @Override
+    public Integer marshal( Boolean c )
+    {
+        return c == null ? null : c ? 1 : 0;
+    }
 }

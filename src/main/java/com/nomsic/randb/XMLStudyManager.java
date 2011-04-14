@@ -14,27 +14,13 @@
  * You should have received a copy of the GNU General Public License
  * along with Randb.  If not, see <http://www.gnu.org/licenses/>.
  */
-package com.nomsic.randb.exception;
+package com.nomsic.randb;
 
-public class RandbException extends Exception {
+import com.nomsic.randb.persistence.xml.RandbXMLPersistenceProvider;
 
-	private static final long serialVersionUID = 6561115726968717130L;
+public class XMLStudyManager extends StudyManager{
 
-	public RandbException() {
-		super();
+	public XMLStudyManager(String dataFolder) {
+		super(new RandbXMLPersistenceProvider(dataFolder));
 	}
-
-	public RandbException(String message, Throwable cause) {
-		super(message, cause);
-	}
-
-	public RandbException(String message) {
-		super(message);
-	}
-
-	public RandbException(Throwable cause) {
-		super(cause);
-	}
-
-	
 }

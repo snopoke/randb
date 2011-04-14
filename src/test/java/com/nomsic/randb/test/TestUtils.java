@@ -14,27 +14,25 @@
  * You should have received a copy of the GNU General Public License
  * along with Randb.  If not, see <http://www.gnu.org/licenses/>.
  */
-package com.nomsic.randb.exception;
+package com.nomsic.randb.test;
 
-public class RandbException extends Exception {
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
 
-	private static final long serialVersionUID = 6561115726968717130L;
+import org.apache.commons.io.IOUtils;
+import org.junit.Ignore;
 
-	public RandbException() {
-		super();
+@Ignore
+public class TestUtils {
+
+	public static String getFileAsString(File file)
+			throws FileNotFoundException, IOException {
+		FileReader fileReader = new FileReader(file);
+		String indexString = IOUtils.toString(fileReader);
+		fileReader.close();
+		return indexString;
 	}
 
-	public RandbException(String message, Throwable cause) {
-		super(message, cause);
-	}
-
-	public RandbException(String message) {
-		super(message);
-	}
-
-	public RandbException(Throwable cause) {
-		super(cause);
-	}
-
-	
 }

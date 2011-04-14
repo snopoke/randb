@@ -1,4 +1,20 @@
-package com.nomsic.randb;
+/*
+ * This file is part of Randb.
+ *
+ * Randb is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+
+ * Randb is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+
+ * You should have received a copy of the GNU General Public License
+ * along with Randb.  If not, see <http://www.gnu.org/licenses/>.
+ */
+package com.nomsic.randb.model;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -8,6 +24,12 @@ import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 
+/**
+ * A block consists of a number of cells. A block is used once
+ * all the cells in the block are used.
+ * 
+ * @author Simon Kelly
+ */
 @XmlRootElement(name="block")
 public class Block {
 	
@@ -22,18 +44,21 @@ public class Block {
 	
 	public Block(List<Cell> cells) {
 		super();
-		this.cells = cells;
+		this.cells = new ArrayList<Cell>(cells);
 	}
 
+	/**
+	 * @return unmodifiable list of cells
+	 */
 	public List<Cell> getCells() {
-		return cells;
+		return Collections.unmodifiableList(cells);
 	}
 	
 	public boolean isUsed(){
 		return used != null && used.equals(Boolean.TRUE);
 	}
 	
-	public void markUsed(){
+	/*package private*/ void markUsed(){
 		used = true;
 	}
 	
