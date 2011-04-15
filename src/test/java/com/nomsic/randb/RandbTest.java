@@ -32,7 +32,7 @@ import com.nomsic.randb.model.Cell;
 import com.nomsic.randb.persistence.xml.RandbXMLPersistenceProvider;
 import com.nomsic.randb.test.TestUtils;
 
-public class StudyManagerTest {
+public class RandbTest {
 
 	private static final String TEST_DATA_FOLDER = "target/testDataFolder";
 	private Randb manager;
