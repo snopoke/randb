@@ -35,14 +35,14 @@ import com.nomsic.randb.test.TestUtils;
 public class StudyManagerTest {
 
 	private static final String TEST_DATA_FOLDER = "target/testDataFolder";
-	private StudyManager manager;
+	private Randb manager;
 	private RandbXMLPersistenceProvider provider;
 	
 	@Before
 	public void setup() throws IOException {
 		FileUtils.deleteDirectory(new File(TEST_DATA_FOLDER));
 		provider = new RandbXMLPersistenceProvider(TEST_DATA_FOLDER);
-		manager = new StudyManager(provider);
+		manager = new Randb(provider);
 	}
 
 	@Test

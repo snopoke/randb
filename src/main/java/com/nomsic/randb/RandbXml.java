@@ -18,9 +18,9 @@ package com.nomsic.randb;
 
 import com.nomsic.randb.persistence.xml.RandbXMLPersistenceProvider;
 
-public class XMLStudyManager extends StudyManager{
+public class RandbXml extends Randb{
 
-	public XMLStudyManager(String dataFolder) {
+	public RandbXml(String dataFolder) {
 		super(new RandbXMLPersistenceProvider(dataFolder));
 	}
 }

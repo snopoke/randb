@@ -30,16 +30,16 @@ import com.nomsic.randb.model.BlockGroup;
 import com.nomsic.randb.model.Cell;
 import com.nomsic.randb.persistence.RandbPersistenceProvider;
 
-public class StudyManager {
+public class Randb {
 
 	private static final Logger log = LoggerFactory
-			.getLogger(StudyManager.class);
+			.getLogger(Randb.class);
 
 	private RandbPersistenceProvider persistenceProvider;
 	private int autogenerateNum = 5;
 	private boolean autogenerate = true;
 
-	public StudyManager(RandbPersistenceProvider persistenceProvider) {
+	public Randb(RandbPersistenceProvider persistenceProvider) {
 		this.persistenceProvider = persistenceProvider;
 	}
 
