@@ -51,7 +51,7 @@ public class RandbXMLPersistenceProvider implements RandbPersistenceProvider {
 	private Map<String, BlockGroup> cache = new HashMap<String, BlockGroup>();
 
 	public RandbXMLPersistenceProvider(String dataFolder) {
-		log.debug("Initialising XML persistence [datafolder={}]", dataFolder);
+		log.info("Initialising XML persistence [datafolder={}]", dataFolder);
 		try {
 			jaxb = new JaxbUtil(BlockGroup.class);
 			jaxbIndex = new JaxbUtil(Index.class);
@@ -66,7 +66,7 @@ public class RandbXMLPersistenceProvider implements RandbPersistenceProvider {
 	private void initialise(){
 		dataFolderFile = new File(dataFolder);
 		boolean mkdir = dataFolderFile.mkdir();
-		log.debug(mkdir ? "Data folder created" : "Data folder already exists");
+		log.info(mkdir ? "Data folder created" : "Data folder already exists");
 		loadIndex();
 	}
 	
@@ -86,7 +86,7 @@ public class RandbXMLPersistenceProvider implements RandbPersistenceProvider {
 
 	private void writeIndex() {
 		if (index == null){
-			log.debug("Creating new index");
+			log.info("Creating new index");
 			index = new Index();
 		}
 		

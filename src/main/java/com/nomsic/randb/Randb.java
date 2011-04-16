@@ -88,7 +88,7 @@ public class Randb {
 		BlockGroup bg = persistenceProvider.load(blockGroupName);
 		Cell nextUnused = bg.getNextUnused();
 		if (nextUnused == null) {
-			log.debug("All cells used for BlockGroup [name={}]", blockGroupName);
+			log.info("All cells used for BlockGroup [name={}]", blockGroupName);
 			if (autogenerate) {
 				appendBlocks(bg);
 				nextUnused = bg.getNextUnused();
@@ -99,7 +99,7 @@ public class Randb {
 	}
 
 	private void appendBlocks(BlockGroup bg) throws RandbException {
-		log.debug("Autogenerating [{}] blocks for BlockGroup [name={}]",
+		log.info("Autogenerating [{}] blocks for BlockGroup [name={}]",
 				autogenerateNum, bg.getName());
 
 		Set<Integer> blockSizes = bg.getBlockSizes();
