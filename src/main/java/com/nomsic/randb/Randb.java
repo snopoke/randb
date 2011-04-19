@@ -16,10 +16,8 @@
  */
 package com.nomsic.randb;
 
-import java.util.HashSet;
+import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
-import java.util.Set;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -52,7 +50,7 @@ public class Randb {
 	}
 
 	public BlockGroup createBlockGroup(String name, int blocks,
-			int[] blockSizes, String[] groupNames) throws RandbException {
+			List<Integer> blockSizes, List<String> groupNames) throws RandbException {
 		BlockGroup blockGroup = getBlockGroup(name);
 		if (blockGroup != null) {
 			throw new IllegalArgumentException("BlockGroup with name '" + name
@@ -102,9 +100,8 @@ public class Randb {
 		log.info("Autogenerating [{}] blocks for BlockGroup [name={}]",
 				autogenerateNum, bg.getName());
 
-		Set<Integer> blockSizes = bg.getBlockSizes();
-		Integer[] blockSizesArray = blockSizes.toArray(new Integer[blockSizes
-				.size()]);
+		List<Integer> blockSizes = bg.getBlockSizes();
+
 		List<Block> blocks = bg.getBlocks();
 		if (blocks.isEmpty()) {
 			throw new RandbException("No blocks exist in blockgroup:"
@@ -115,9 +112,11 @@ public class Randb {
 		if (cells.isEmpty()) {
 			throw new RandbException("No cells exist in block");
 		}
-		Set<String> groups = new HashSet<String>();
+		List<String> groups = new ArrayList<String>();
 		for (Cell cell : cells) {
-			groups.add(cell.getGroup());
+			if (!groups.contains(cell.getGroup())){
+				groups.add(cell.getGroup());
+			}
 		}
 
 		if (log.isTraceEnabled()) {
@@ -125,18 +124,9 @@ public class Randb {
 					blockSizes);
 		}
 
-		String[] groupsArray = groups.toArray(new String[groups.size()]);
-
-		for (int i = 0; i < autogenerateNum; i++) {
-			Random random = new Random();
-			int sizeIndex = random.nextInt(blockSizesArray.length);
-			int size = blockSizesArray[sizeIndex].intValue();
-			Block generated = Block.generateBlock(size, groupsArray);
-			bg.addBlock(generated);
-
-			if (log.isTraceEnabled())
-				log.trace("Generated block [size={}]", size);
-		}
+		BlockGroup generate = BlockGroup.generate("", autogenerateNum, blockSizes, groups);
+		generate.getBlocks();
+		bg.addBlocks(generate.getBlocks());
 	}
 
 }

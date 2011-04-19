@@ -19,17 +19,12 @@ package com.nomsic.randb.model;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Random;
-import java.util.Set;
 
 import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
-import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
-
-import com.nomsic.randb.persistence.xml.SetCsvAdapter;
 
 /**
  * Represents a group of blocks with a name
@@ -46,8 +41,7 @@ public class BlockGroup {
 	private List<Block> blocks;
 	
 	@XmlAttribute(name="sizes")
-	@XmlJavaTypeAdapter(value=SetCsvAdapter.class)
-	private Set<Integer> blockSizes = new HashSet<Integer>();
+	private List<Integer> blockSizes = new ArrayList<Integer>();
 	
 	public BlockGroup() {
 	}
@@ -72,24 +66,28 @@ public class BlockGroup {
 	/**
 	 * @return @return unmodifiable set of block sizes
 	 */
-	public Set<Integer> getBlockSizes() {
-		return Collections.unmodifiableSet(blockSizes);
+	public List<Integer> getBlockSizes() {
+		return Collections.unmodifiableList(blockSizes);
 	}
 	
 	public void addBlock(Block block){
 		if (blocks == null){
 			blocks = new ArrayList<Block>();
 		}
-		blockSizes.add(block.size());
+		if (!blockSizes.contains(block.size())){
+			blockSizes.add(block.size());
+		}
 		blocks.add(block);
 	}
 	
-	public void addBlock(Collection<Block> blocks){
+	public void addBlocks(Collection<Block> newBlocks){
 		if (blocks == null){
 			blocks = new ArrayList<Block>();
 		}
-		for (Block b : blocks) {
-			blockSizes.add(b.size());
+		for (Block b : newBlocks) {
+			if (!blockSizes.contains(b.size())){
+				blockSizes.add(b.size());
+			}
 			blocks.add(b);
 		}
 	}
@@ -127,14 +125,27 @@ public class BlockGroup {
 		return builder.toString();
 	}
 
-	public static BlockGroup generate(String name,int blocks, int[] blockSizes, String[] groups){
+	/**
+	 * Generate a BlockGroup. 
+	 * 
+	 * Note that due to randomly selecting block sizes it is possible that not
+	 * all block sizes will be used.
+	 * 
+	 * @param name 
+	 * @param blocks the number of blocks to generate
+	 * @param blockSizes an array of sizes to make the blocks
+	 * @param groups an array of group names to use for the cells
+	 * 
+	 * @return
+	 */
+	public static BlockGroup generate(String name,int blocks, List<Integer> blockSizes, List<String> groups){
 		Random random = new Random();
 		BlockGroup bg = new BlockGroup();
 		bg.name = name;
+		
 		for (int i = 0; i < blocks; i++) {
-			int index = random.nextInt(blockSizes.length);
-			int blockSize = blockSizes[index];
-			bg.blockSizes.add(blockSize);
+			int index = random.nextInt(blockSizes.size());
+			int blockSize = blockSizes.get(index);
 			Block block = Block.generateBlock(blockSize,groups);
 			bg.addBlock(block);
 		}

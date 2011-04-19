@@ -74,11 +74,11 @@ public class Block {
 		return builder.toString();
 	}
 
-	public static Block generateBlock(int size, String[] groups){
+	public static Block generateBlock(int size, List<String> groups){
 		List<Cell> c = new ArrayList<Cell>();
 		for (int i = 0; i < size; i++) {
-			int j = i%groups.length;
-			String gp = groups[j];
+			int j = i%groups.size();
+			String gp = groups.get(j);
 			c.add(new Cell(false, gp));
 		}
 		

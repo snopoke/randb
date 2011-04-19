@@ -19,6 +19,7 @@ package com.nomsic.randb;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.util.Arrays;
 
 import junit.framework.Assert;
 
@@ -48,7 +49,8 @@ public class RandbTest {
 	@Test
 	public void testCreateBlockGroup() throws RandbException, FileNotFoundException, IOException{
 		String name = "TEST";
-		manager.createBlockGroup(name, 2, new int[]{2,4}, new String[]{"A","B"});
+		manager.createBlockGroup(name, 2,  Arrays.asList(new Integer[]{2,4}),
+				Arrays.asList(new String[]{"A","B"}));
 		
 		String filename = provider.getIndexMap().get(name);
 		File file = new File(TEST_DATA_FOLDER + File.separator + filename);
@@ -60,14 +62,17 @@ public class RandbTest {
 	@Test(expected=IllegalArgumentException.class)
 	public void testCreateBlockGroup_twice() throws RandbException, FileNotFoundException, IOException{
 		String name = "TEST";
-		manager.createBlockGroup(name, 2, new int[]{2,4}, new String[]{"A","B"});
-		manager.createBlockGroup(name, 2, new int[]{2,4}, new String[]{"A","B"});
+		manager.createBlockGroup(name, 2, Arrays.asList(new Integer[]{2,4}),
+				Arrays.asList(new String[]{"A","B"}));
+		manager.createBlockGroup(name, 2, Arrays.asList(new Integer[]{2,4}),
+				Arrays.asList(new String[]{"A","B"}));
 	}
 	
 	@Test
 	public void testGetNextCell() throws RandbException, FileNotFoundException, IOException{
 		String name = "TEST";
-		manager.createBlockGroup(name, 2, new int[]{2,4}, new String[]{"A","B"});
+		manager.createBlockGroup(name, 2,  Arrays.asList(new Integer[]{2,4}),
+				Arrays.asList(new String[]{"A","B"}));
 		Cell nextCell = manager.getNextCell(name);
 		
 		provider.clearCache();
@@ -84,7 +89,8 @@ public class RandbTest {
 		manager.setAutogenerate(true);
 		int autogenerateNum = 10;
 		manager.setAutogenerateNum(autogenerateNum);
-		manager.createBlockGroup(name, 2, new int[]{2,4}, new String[]{"A","B"});
+		manager.createBlockGroup(name, 2,  Arrays.asList(new Integer[]{2,4}),
+				Arrays.asList(new String[]{"A","B"}));
 		BlockGroup bg = manager.getBlockGroup(name);
 		Cell cell = null;
 		do{

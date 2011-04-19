@@ -19,6 +19,8 @@ package com.nomsic.randb.persistence.xml;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.util.Arrays;
+import java.util.List;
 
 import junit.framework.Assert;
 
@@ -54,7 +56,8 @@ public class RandbXMLPersistenceProviderTest {
 	@Test
 	public void testInitExisting() throws RandbException, FileNotFoundException, IOException{
 		String name = "testName";
-		provider.save(BlockGroup.generate(name, 2, new int[]{2}, new String[]{"A","B"}));
+		provider.save(BlockGroup.generate(name, 2, Arrays.asList(new Integer[]{2}),
+				Arrays.asList(new String[]{"A","B"})));
 		
 		File file = new File(TEST_DATA_FOLDER + File.separator + "index.xml");
 		Assert.assertTrue(file.exists());
@@ -69,7 +72,8 @@ public class RandbXMLPersistenceProviderTest {
 	@Test
 	public void testSave() throws RandbException, FileNotFoundException, IOException{
 		String name = "testName";
-		provider.save(BlockGroup.generate(name, 2, new int[]{2}, new String[]{"A","B"}));
+		provider.save(BlockGroup.generate(name, 2, Arrays.asList(new Integer[]{2}), 
+				Arrays.asList(new String[]{"A","B"})));
 		
 		File file = new File(TEST_DATA_FOLDER + File.separator + "index.xml");
 		String indexString = TestUtils.getFileAsString(file);
@@ -85,11 +89,16 @@ public class RandbXMLPersistenceProviderTest {
 	@Test
 	public void testLoad() throws RandbException, FileNotFoundException, IOException{
 		String name = "testName";
-		provider.save(BlockGroup.generate(name, 2, new int[]{2}, new String[]{"A","B"}));
+		BlockGroup generate = BlockGroup.generate(name, 10, Arrays.asList(new Integer[]{2,4,9}),
+				Arrays.asList(new String[]{"A","B"}));
+		
+		List<Integer> expected = generate.getBlockSizes();
+		provider.save(generate);
 		
 		provider = new RandbXMLPersistenceProvider(TEST_DATA_FOLDER);
 		BlockGroup load = provider.load(name);
 		Assert.assertNotNull(load);
 		Assert.assertEquals(name, load.getName());
+		Assert.assertEquals(expected, load.getBlockSizes());
 	}
 }
