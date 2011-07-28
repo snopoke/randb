@@ -82,6 +82,13 @@ public class Randb {
 		persistenceProvider.save(bg);
 	}
 
+	/**
+	 * Not thread safe.
+	 * 
+	 * @param blockGroupName
+	 * @return
+	 * @throws RandbException
+	 */
 	public Cell getNextCell(String blockGroupName) throws RandbException {
 		BlockGroup bg = persistenceProvider.load(blockGroupName);
 		Cell nextUnused = bg.getNextUnused();
@@ -92,8 +99,18 @@ public class Randb {
 				nextUnused = bg.getNextUnused();
 			}
 		}
-		persistenceProvider.save(bg);
 		return nextUnused;
+	}
+	
+	public Cell getCell(String blockGroupName, String cellId) throws RandbException{
+		BlockGroup bg = persistenceProvider.load(blockGroupName);
+		return bg.getCell(cellId);
+	}
+	
+	public void markAsUsed(String blockGroupName, Cell cell) throws RandbException{
+		BlockGroup bg = persistenceProvider.load(blockGroupName);
+		bg.markAsUsed(cell);
+		persistenceProvider.save(bg);
 	}
 
 	private void appendBlocks(BlockGroup bg) throws RandbException {

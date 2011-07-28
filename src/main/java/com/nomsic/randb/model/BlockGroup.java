@@ -106,10 +106,6 @@ public class BlockGroup {
 				Cell c = block.getCell(i);
 				if (!c.isUsed()){
 					Cell clone = c.clone();
-					c.markUsed();	
-					if (i == block.size()-1){
-						block.markUsed();
-					}
 					return clone;
 				}
 			}
@@ -117,6 +113,50 @@ public class BlockGroup {
 		return null;
 	}
 	
+	public Cell getCell(String cellId) {
+		for (Block block : blocks) {
+			for (Cell cell : block.getCells()) {
+				if (cell.getUuid().toString().equals(cellId)){
+					return cell;
+				}
+			}
+		}
+		return null;
+	}
+	
+	public Block getBlockContainingCell(Cell cell){
+		for (Block block : blocks) {
+			if (cell.isUsed() != block.isUsed()){
+				continue;
+			}
+
+			for (Cell c : block.getCells()) {
+				if (cell.getUuid().equals(c.getUuid())){
+					return block;
+				}
+			}
+		}
+		return null;
+	}
+	
+	public void markAsUsed(Cell cell) {
+		if (cell.isUsed())
+			return;
+		
+		Block block = getBlockContainingCell(cell);
+		
+		for (int i = 0; i < block.size(); i++) {
+			Cell c = block.getCell(i);
+			if (c.getUuid().equals(cell.getUuid())){
+				c.markUsed();	
+				if (i == block.size()-1){
+					block.markUsed();
+				}
+				return;
+			}
+		}
+	}
+
 	@Override
 	public String toString() {
 		StringBuilder builder = new StringBuilder();
@@ -151,4 +191,5 @@ public class BlockGroup {
 		}
 		return bg;
 	}
+
 }

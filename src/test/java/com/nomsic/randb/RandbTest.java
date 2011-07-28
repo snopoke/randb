@@ -20,6 +20,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.Arrays;
+import java.util.List;
 
 import junit.framework.Assert;
 
@@ -28,6 +29,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import com.nomsic.randb.exception.RandbException;
+import com.nomsic.randb.model.Block;
 import com.nomsic.randb.model.BlockGroup;
 import com.nomsic.randb.model.Cell;
 import com.nomsic.randb.persistence.xml.RandbXMLPersistenceProvider;
@@ -79,7 +81,7 @@ public class RandbTest {
 		
 		BlockGroup bg = manager.getBlockGroup(name);
 		Cell cell = bg.getBlocks().get(0).getCell(0);
-		Assert.assertTrue(cell.isUsed());
+		Assert.assertFalse(cell.isUsed());
 		Assert.assertEquals(cell.getUuid(), nextCell.getUuid());
 	}
 	
@@ -95,15 +97,52 @@ public class RandbTest {
 		Cell cell = null;
 		do{
 			cell = bg.getNextUnused();
+			if (cell != null)
+				bg.markAsUsed(cell);
 		} while (cell != null);
 
 		int initialSize = bg.getBlocks().size();
 		cell = manager.getNextCell(name);
 		Assert.assertNotNull(cell);
 		
-		provider.clearCache();
 		int sizeAfter = manager.getBlockGroup(name).getBlocks().size();
 		Assert.assertEquals(initialSize + autogenerateNum, sizeAfter);
 	}
+	
+	@Test
+	public void testMarkUsed() throws RandbException{
+		String name = "TEST";
+		manager.createBlockGroup(name , 3,  Arrays.asList(new Integer[]{2,4}),
+				Arrays.asList(new String[]{"A","B"}));
+		
+		Cell c1 = manager.getNextCell(name);
+		manager.markAsUsed(name, c1);
+		
+		Cell c2 = manager.getNextCell(name);
+		Assert.assertFalse(c1.getUuid().equals(c2.getUuid()));
+		
+		provider.clearCache();
+		
+		Cell c1a = manager.getCell(name, c1.getUuid().toString());
+		Assert.assertTrue(c1a.isUsed());
+	}
 
+	@Test
+	public void testMarkUsed_endOfBlock() throws RandbException{
+		String name = "TEST";
+		BlockGroup bg = manager.createBlockGroup(name , 3,  Arrays.asList(new Integer[]{2,4}),
+				Arrays.asList(new String[]{"A","B"}));
+		
+		Block block = bg.getBlocks().get(0);
+		List<Cell> cells = block.getCells();
+		for (int i = 0; i < cells.size(); i++) {
+			Cell c1 = manager.getNextCell(name);
+			manager.markAsUsed(name, c1);
+		}
+		
+		provider.clearCache();
+		
+		Block block2 = manager.getBlockGroup(name).getBlocks().get(0);
+		Assert.assertTrue(block2.isUsed());
+	}
 }
